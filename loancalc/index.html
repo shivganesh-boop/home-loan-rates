@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OwnWard | LoanCalc</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🏠%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#e8f0f5;--inp:#eef3f8;--card:#fff;--tx:#10303f;--mu:#506879;--bd:#d0dee7;--ac:#0b3d59;--acbg:#e1eef5;--hi:#0d6485;--hibg:#e3f1f8;--no:#8a5a44;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1d3b;--inp:#0a1d3b;--card:#112b52;--tx:#e8f0fa;--mu:#a9bdd6;--bd:#24467a;--ac:#7fd0f2;--acbg:#183a6b;--hi:#7fd0f2;--hibg:#173a6b;--no:#e0b49c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a1d3b;--inp:#0a1d3b;--card:#112b52;--tx:#e8f0fa;--mu:#a9bdd6;--bd:#24467a;--ac:#7fd0f2;--acbg:#183a6b;--hi:#7fd0f2;--hibg:#173a6b;--no:#e0b49c;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:#7E9BB4;color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",Arial,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:20px 16px 40px}
+.brand{background:#0a1d3b;color:#fff;border-bottom:1px solid #1b3358}
+.brand .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;padding-top:10px;padding-bottom:10px}
+.lg{display:flex;align-items:center;gap:10px}
+.lg img{height:42px;display:block}
+.bn{font:600 22px/1 Georgia,"Times New Roman",serif}
+.bn i{font-weight:700}
+.bn span{font:500 18px/1 system-ui,sans-serif;margin-left:8px;color:#e8a24a}
+.bz{display:flex;align-items:center;gap:5px;font:500 10px/1 system-ui,sans-serif;letter-spacing:.12em;color:#cfdcf0;margin:6px 0 0 auto;width:max-content}
+.tg{flex-basis:100%;font-size:13px;color:#b9c7da;margin:0}
+.lang{display:flex;gap:6px}
+.lang button{background:transparent;border:1px solid #3b5278;color:#cfdcf0;padding:6px 12px;border-radius:999px;font:500 13px system-ui,sans-serif;cursor:pointer}
+.lang button[aria-pressed=true]{background:#e8a24a;border-color:#e8a24a;color:#0a1d3b}
+h1{font:500 clamp(28px,5.5vw,44px)/1.12 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",Arial,sans-serif;margin:8px 0 10px;letter-spacing:-.02em}
+.hero{background:#0a1d3b;color:#fff;padding:20px 0 72px}
+.hero .wrap{padding-bottom:0}
+.sub{color:#cfe6f2;margin:0;max-width:56ch;font-size:16px}
+.cols{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:20px;align-items:start;margin-top:-44px}
+@media(max-width:820px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:20px}
+h2{font-size:16px;margin:0 0 12px}
+label.f,legend{display:block;font-weight:600;margin:0 0 4px;padding:0}
+.fld{margin-bottom:14px}
+input[type=number],select{width:100%;padding:10px;font:inherit;color:var(--tx);background:var(--inp);border:1px solid var(--bd);border-radius:6px}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+fieldset.mode{border:0;padding:0;margin:0 0 14px;min-width:0}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;cursor:pointer}
+.opt:has(input:checked){border-color:var(--ac);background:var(--acbg)}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--bd);cursor:pointer}
+.chk input,.opt input{margin-top:3px;width:18px;height:18px;accent-color:var(--ac);flex:none}
+small{display:block;color:var(--mu)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.err{color:var(--no);font-size:13px;min-height:18px;margin:4px 0 0}
+button.go{width:100%;margin-top:14px;padding:12px;font:600 15px system-ui,sans-serif;color:#fff;background:var(--ac);border:0;border-radius:14px;cursor:pointer}
+:root[data-theme="dark"] button.go{color:#06222f}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) button.go{color:#06222f}}
+.empty{color:var(--mu);padding:30px 6px;text-align:center}
+.note{background:var(--hibg);border:1px solid var(--hi);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:13.5px}
+.save{background:var(--acbg);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:14px}
+.bank{border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin-bottom:12px;background:var(--card)}
+.bank.best{border-color:var(--hi);background:var(--hibg)}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.nm{font-weight:600;font-size:16px}
+.tag{font-size:12px;font-weight:600;color:var(--hi);margin-left:8px}
+.rate{font:600 30px/1 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ac)}
+.rate small{display:inline;font:13px system-ui,sans-serif}
+.rng{color:var(--mu);font-size:13px}
+.emi{font-size:13.5px;margin-top:8px}
+.bank ul{margin:8px 0 0;padding-left:18px;color:var(--mu);font-size:13.5px}
+.bank.na .rate{color:var(--no);font-size:18px}
+.wa{display:block;text-align:center;text-decoration:none;font:600 15px system-ui,sans-serif;background:#1d9a52;color:#fff;padding:13px;border-radius:14px;margin:4px 0 12px}
+.disc{color:#0a1d3b;font-size:12.5px;margin-top:16px}
+:root,:root:not([data-theme="light"]),:root[data-theme="dark"]{--card:#fff;--inp:#fff;--acbg:#fff;--hibg:#fff;--tx:#10303f;--mu:#506879;--bd:#d0dee7;--ac:#0b3d59;--hi:#0d6485;--no:#8a5a44;color-scheme:light}
+button.go{color:#fff!important}
+.ltv,.save,.inf{border:1px solid var(--bd)}
+.bank.best{border-width:2px}
+.i{margin-left:auto;flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--ac);background:transparent;color:var(--ac);font:italic 700 13px/1 Georgia,serif;cursor:pointer;padding:0}
+.inf{background:var(--acbg);border-radius:12px;padding:10px 12px;margin:0 0 8px;font-size:13px;line-height:1.55}
+.inf b{display:block;margin-top:4px;color:var(--ac)}
+.inf b:first-child{margin-top:0}
+.ltv{background:var(--acbg);border-radius:12px;padding:10px 12px;margin-bottom:14px;font-size:14px}
+#ltvF{font-weight:700;font-size:18px;color:var(--ac);margin:2px 0}
+</style>
+</head>
+<body>
+<div class="brand"><div class="wrap">
+<div class="lg"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAABOCAIAAAAb9FfEAAACeUlEQVR42u3bwWvTUBgA8NfY9WAOVTwFTNI/QMTsUGpslosHHYLgpYehg4GnucNgCFPYQZgeFHrodi100EN7E0UKnrqEdFRYUBFv0rwc6m10kIu7eHgjxlKzNL4XmvF9p/B4yesvL9/LlwfNXBRvofQHh85FAAMYwAAGMIABDGAAAxgJMhqLR6uKx3SIC3N5ibWhKJwUhROE0KefuVQyiIEcM5UwfKhWFc83kHgy7xWFXylj7Np8fzgXbNk55PvDXPpSfPnDZV+yc8jv2jyjgTIJbCk0Fo/6wxw7Q0KMBCLL9OqiLCGEVF1zHQchZHXNlM2GKEuqromF8dXc6hosMEwYql5WdS2kA3UM/defKEt37987o09BRgi5Dp5RxrP1lS/ff1y7cd1vcQe48/b98WiEUCZ/Kc9IQpPRadXkq8K7j5bPcAe4tdc8Ho1cB3/7/NX/9dQlHEWDdlMJ72N1zVaj+XcWaapenhVGFINWUjxsFoQrLCRcMoY/ndu1hw9uU5dwdA37B/aZpzxfX6Euic/QSsqYwejZL6v1KOculBTXwRQlXHxDe9xwp7I21UUoSrh4k9Bp14KNMQwhko2tzWkx2YgJcGqYlMrb1XrEZ+lfkjcvXlUeLQULMFXXSDnjDjApXsJfL5EYIQvRfxr8aO01J1ZixCY6EgXGxDB69na1bkRYmiIGKRbDa0qaDOqAoMTqmiQxpvJMzeClMmIcZFrcAa4sL83ElkJiAQxgAAMYwAAGMIABDGCcL0Y2ycGM3umX1j7tT67kGMZBzN0TJgwPm+H3+/HT18ENgY2tTcgNYKQxMvCPAWAAAxjAAAYwgAEMYAADGIziNx1MAIKF+ybUAAAAAElFTkSuQmCC" alt=""><div><div class="bn">Own<i>Ward</i><span>| LoanCalc</span></div><div class="bz">by <svg width="11" height="11" viewBox="0 0 11 11" aria-hidden="true"><path d="M0 0h8l3 3v8H3L0 8z" fill="currentColor"/></svg> ZERODHA</div></div></div>
+<div class="lang" role="group" aria-label="Language"><button type="button" data-l="0" aria-pressed="true">English</button><button type="button" data-l="1" aria-pressed="false">हिन्दी</button><button type="button" data-l="2" aria-pressed="false">मराठी</button></div>
+<p class="tg">Upwards and onwards</p>
+</div></div>
+<header class="hero"><div class="wrap">
+<h1 data-k="h1"></h1>
+<p class="sub" data-k="sub"></p>
+</div></header>
+<div class="wrap" style="padding-top:0">
+<div class="cols">
+<form class="panel" id="f" novalidate>
+<h2 data-k="det"></h2>
+<fieldset class="mode"><legend data-k="hist"></legend>
+<label class="opt"><input type="radio" name="mode" id="mc"><span data-k="hasS"></span></label>
+<label class="opt"><input type="radio" name="mode" id="mn"><span><span data-k="newC"></span><small data-k="newCs"></small></span></label>
+<div class="fld" id="scw" hidden><label class="f" for="sc" data-k="scL"></label><input id="sc" type="number" min="300" max="900" inputmode="numeric" data-p="phS"></div>
+<div class="err" id="err" role="alert"></div></fieldset>
+<div class="fld"><label class="f" for="g" data-k="gen"></label>
+<select id="g"><option value="m" data-k="male"></option><option value="f" data-k="female"></option><option value="o" data-k="other"></option></select></div>
+<div class="fld"><label class="f" for="emp" data-k="emp"></label>
+<select id="emp"><option value="pvt" data-k="e1"></option><option value="govt" data-k="e2"></option><option value="self" data-k="e3"></option><option value="pens" data-k="e4"></option></select></div>
+<div class="fld"><label class="f" for="pv" data-k="pvN"></label><input id="pv" type="number" min="1" step="1" inputmode="numeric" data-p="phP"><small id="pvF"></small></div>
+<div class="row2" style="margin-top:0"><div class="fld"><label class="f" for="amt" data-k="amtN"></label><input id="amt" type="number" min="1" max="100000000" step="1" inputmode="numeric" data-p="phA"><small id="amtF"></small></div><div class="fld"><label class="f" for="yrs" data-k="yrsL"></label><select id="yrs"><option value="" data-k="selY"></option></select></div></div>
+<div class="ltv"><b data-k="ltvN"></b><div id="ltvF"></div><small data-k="ltvM"></small></div>
+<div class="fld"><label class="f" for="own" data-k="ownN"></label><input id="own" type="number" min="1" max="30" step="0.01" inputmode="decimal" data-p="phO"><small data-k="ownS"></small></div>
+<label class="chk"><input type="checkbox" id="young"><span data-k="young"></span></label>
+<label class="chk" id="incw" hidden><input type="checkbox" id="inc18"><span data-k="inc"></span></label>
+<label class="chk" id="btw"><input type="checkbox" id="bt"><span><span data-k="bt"></span><small data-k="btS"></small></span></label>
+<label class="chk"><input type="checkbox" id="rs"><span><span data-k="rs"></span><small data-k="rsS"></small></span></label>
+<label class="chk"><input type="checkbox" id="nri"><span data-k="nri"></span></label>
+<label class="chk"><input type="checkbox" id="ins"><span><span data-k="ins"></span><small data-k="inss"></small></span></label>
+<label class="chk"><input type="checkbox" id="h345"><span data-k="h345"></span></label>
+<label class="chk"><input type="checkbox" id="green"><span data-k="green"></span></label>
+<button type="submit" class="go" data-k="go"></button>
+</form>
+<div id="out"></div>
+</div>
+<p class="disc" id="disc"></p>
+</div>
+<script>
+var $=function(i){return document.getElementById(i)},L=0;
+var T={
+h1:["What home loan rate can you expect?","आपको होम लोन पर कौन सा ब्याज दर मिल सकता है?","तुम्हाला गृहकर्जावर कोणता व्याजदर मिळू शकतो?"],
+sub:["Enter your approximate CIBIL score and answer a few questions. You will see an estimated rate from five banks, lowest first.","अपना अनुमानित CIBIL स्कोर डालें और कुछ सवालों के जवाब दें। आपको पाँच बैंकों की अनुमानित दरें दिखेंगी, सबसे कम पहले।","तुमचा अंदाजे CIBIL स्कोर टाका आणि काही प्रश्नांची उत्तरे द्या. पाच बँकांचे अंदाजे दर दिसतील, सर्वात कमी आधी."],
+det:["Your details","आपकी जानकारी","तुमची माहिती"],
+hist:["Your credit history (choose one)","आपका क्रेडिट इतिहास (एक चुनें)","तुमचा क्रेडिट इतिहास (एक निवडा)"],
+hasS:["I have a CIBIL score","मेरे पास CIBIL स्कोर है","माझ्याकडे CIBIL स्कोर आहे"],
+newC:["I am new to credit","मैं क्रेडिट में नया हूँ","मी क्रेडिटसाठी नवीन आहे"],
+newCs:["No score, or a score of -1 / 0","कोई स्कोर नहीं, या स्कोर -1 / 0 है","स्कोर नाही, किंवा स्कोर -1 / 0 आहे"],
+scL:["Approximate CIBIL score","अनुमानित CIBIL स्कोर","अंदाजे CIBIL स्कोर"],
+gen:["Gender of the main applicant","मुख्य आवेदक का लिंग","मुख्य अर्जदाराचे लिंग"],
+male:["Male","पुरुष","पुरुष"],female:["Female","महिला","महिला"],other:["Other","अन्य","इतर"],
+emp:["Employment type","रोज़गार का प्रकार","नोकरीचा प्रकार"],
+e1:["Salaried, private company","वेतनभोगी, निजी कंपनी","पगारदार, खाजगी कंपनी"],
+e2:["Salaried, Government / PSU","वेतनभोगी, सरकारी / PSU","पगारदार, सरकारी / PSU"],
+e3:["Self-employed or business","स्वरोज़गार या व्यवसाय","स्वयंरोजगार किंवा व्यवसाय"],
+e4:["Pensioner","पेंशनभोगी","निवृत्तीवेतनधारक"],
+amtL:["Loan amount","लोन राशि","कर्जाची रक्कम"],selY:["Select years","वर्ष चुनें","वर्षे निवडा"],errA:["Loan amount can be at most ₹10 crore.","लोन राशि अधिकतम ₹10 करोड़ हो सकती है।","कर्जाची रक्कम कमाल ₹10 कोटी असू शकते."],
+yrsL:["Tenure (years)","अवधि (वर्ष)","कालावधी (वर्षे)"],
+phS:["For example 765","जैसे 765","उदा. 765"],phA:["Whole number, for example 5000000","पूर्ण संख्या, जैसे 5000000","पूर्ण संख्या, उदा. 5000000"],
+young:["An applicant or co-applicant is 40 years or younger","कोई आवेदक या सह-आवेदक 40 वर्ष या उससे कम उम्र का है","कोणताही अर्जदार किंवा सह-अर्जदार 40 वर्षे किंवा कमी वयाचा आहे"],
+inc:["Gross annual income is ₹18 lakh or more","कुल वार्षिक आय ₹18 लाख या अधिक है","एकूण वार्षिक उत्पन्न ₹18 लाख किंवा अधिक आहे"],
+take:["Balance transfer (takeover), resale, fully disbursed or Government project property","बैलेंस ट्रांसफर (टेकओवर), पुनर्विक्रय, पूरी तरह वितरित या सरकारी परियोजना की संपत्ति","बॅलन्स ट्रान्सफर (टेकओव्हर), पुनर्विक्री, पूर्ण वितरित किंवा सरकारी प्रकल्पातील मालमत्ता"],
+nri:["I am an NRI","मैं NRI हूँ","मी NRI आहे"],
+ins:["I will take loan insurance","मैं लोन बीमा लूँगा/लूँगी","मी कर्ज विमा घेईन"],
+inss:["Some banks quote a lower rate with insurance","कुछ बैंक बीमा के साथ कम दर देते हैं","काही बँका विम्यासह कमी दर देतात"],
+h345:["This is my 3rd, 4th or 5th home loan","यह मेरा तीसरा, चौथा या पाँचवाँ होम लोन है","हे माझे तिसरे, चौथे किंवा पाचवे गृहकर्ज आहे"],
+green:["The property is a green (eco-friendly) home","संपत्ति ग्रीन (पर्यावरण-अनुकूल) घर है","मालमत्ता ग्रीन (पर्यावरणपूरक) घर आहे"],
+go:["Show my rates","मेरी दरें दिखाएँ","माझे दर दाखवा"],
+bt:["Balance transfer (takeover)","बैलेंस ट्रांसफर (टेकओवर)","बॅलन्स ट्रान्सफर (टेकओव्हर)"],
+btS:["Moving your existing home loan from another bank to a new bank, usually to get a lower rate.","अपना मौजूदा होम लोन किसी दूसरे बैंक से नए बैंक में ले जाना, आमतौर पर कम दर पाने के लिए।","तुमचे सध्याचे गृहकर्ज दुसऱ्या बँकेतून नवीन बँकेत नेणे, सहसा कमी दर मिळवण्यासाठी."],
+rs:["Resale, fully disbursed or Government project property","पुनर्विक्रय, पूरी तरह वितरित या सरकारी परियोजना की संपत्ति","पुनर्विक्री, पूर्ण वितरित किंवा सरकारी प्रकल्पातील मालमत्ता"],
+rsS:["Resale: you buy the flat from its current owner, not from a builder. Fully disbursed: the property is ready, so the bank pays the full loan in one go. Government project: the flat is part of a project by a government body.","पुनर्विक्रय: आप फ्लैट बिल्डर से नहीं, उसके मौजूदा मालिक से खरीदते हैं। पूरी तरह वितरित: संपत्ति तैयार है, इसलिए बैंक पूरा लोन एक बार में देता है। सरकारी परियोजना: फ्लैट किसी सरकारी संस्था की परियोजना का हिस्सा है।","पुनर्विक्री: तुम्ही फ्लॅट बिल्डरकडून नव्हे, तर त्याच्या सध्याच्या मालकाकडून घेता. पूर्ण वितरित: मालमत्ता तयार आहे, म्हणून बँक पूर्ण कर्ज एकदाच देते. सरकारी प्रकल्प: फ्लॅट सरकारी संस्थेच्या प्रकल्पाचा भाग आहे."],
+pvL:["Property value (to find your loan-to-value, LTV)","संपत्ति का मूल्य (आपका लोन-टू-वैल्यू, LTV जानने के लिए)","मालमत्तेचे मूल्य (तुमचे लोन-टू-व्हॅल्यू, LTV काढण्यासाठी)"],
+ltvM:["Loan-to-value (LTV) is the share of the property price that the bank lends you. Example: property ₹1 crore and loan ₹75 lakh means LTV is 75%. You pay the rest from your own money.","लोन-टू-वैल्यू (LTV) संपत्ति की कीमत का वह हिस्सा है जो बैंक आपको कर्ज में देता है। उदाहरण: संपत्ति ₹1 करोड़ और लोन ₹75 लाख हो तो LTV 75% है। बाकी रकम आप अपनी जेब से देते हैं।","लोन-टू-व्हॅल्यू (LTV) म्हणजे मालमत्तेच्या किमतीचा तो भाग जो बँक तुम्हाला कर्ज म्हणून देते. उदाहरण: मालमत्ता ₹1 कोटी आणि कर्ज ₹75 लाख असेल तर LTV 75% आहे. उरलेली रक्कम तुम्ही स्वतः भरता."],
+phP:["Whole number, for example 8000000","पूर्ण संख्या, जैसे 8000000","पूर्ण संख्या, उदा. 8000000"],
+ltvIs:["Your LTV is about {0}%","आपका LTV लगभग {0}% है","तुमचा LTV सुमारे {0}% आहे"],
+nLtv:["This bank lends up to {0}% of the property value. Your loan is {1}% of it. The bank would lend up to about {2}.","यह बैंक संपत्ति के मूल्य का अधिकतम {0}% देता है। आपका लोन उसका {1}% है। बैंक लगभग {2} तक दे सकता है।","ही बँक मालमत्तेच्या मूल्याच्या कमाल {0}% देते. तुमचे कर्ज त्याच्या {1}% आहे. बँक सुमारे {2} पर्यंत देऊ शकते."],
+pvN:["Property value","संपत्ति का मूल्य","मालमत्तेचे मूल्य"],
+amtN:["Loan you want","आपको कितना लोन चाहिए","तुम्हाला हवे असलेले कर्ज"],
+ltvT:["Loan-to-value (LTV), calculated for you","लोन-टू-वैल्यू (LTV), आपके लिए गणना की गई","लोन-टू-व्हॅल्यू (LTV), तुमच्यासाठी मोजले"],
+ltvE:["Enter property value and loan to see it","देखने के लिए संपत्ति का मूल्य और लोन डालें","पाहण्यासाठी मालमत्तेचे मूल्य आणि कर्ज टाका"],
+ltvC:["LTV is capped at 90%. We used a loan of {0}, which is 90% of the property value.","LTV अधिकतम 90% तक सीमित है। हमने {0} का लोन लिया, जो संपत्ति के मूल्य का 90% है।","LTV कमाल 90% पर मर्यादित आहे. आम्ही {0} चे कर्ज धरले, जे मालमत्तेच्या मूल्याच्या 90% आहे."],
+sgT:["Suggestion","सुझाव","सूचना"],
+sgA:["At your LTV of {0}%, these banks can lend the full amount: {1}.","आपके {0}% LTV पर ये बैंक पूरा लोन दे सकते हैं: {1}।","तुमच्या {0}% LTV वर या बँका पूर्ण कर्ज देऊ शकतात: {1}."],
+sgP:["{0} lends at most {1}% of the property value, about {2}. To use it, pay about {3} more from your own money.","{0} संपत्ति के मूल्य का अधिकतम {1}% देता है, यानी लगभग {2}। इसका लाभ लेने के लिए अपनी जेब से लगभग {3} और दें।","{0} मालमत्तेच्या मूल्याच्या कमाल {1}% देते, म्हणजे सुमारे {2}. याचा लाभ घेण्यासाठी स्वतःकडून सुमारे {3} जास्त भरा."],
+ltvN:["Loan-to-value (LTV)","लोन-टू-वैल्यू (LTV)","लोन-टू-व्हॅल्यू (LTV)"],
+ownL:["Rate you already have (optional)","आपके पास पहले से मौजूद दर (वैकल्पिक)","तुमच्याकडे आधीपासून असलेला दर (ऐच्छिक)"],
+ownS:["For example, an offer from a broker or another lender. Per year, in %. Used to show how much interest you could save.","जैसे किसी ब्रोकर या दूसरे ऋणदाता का ऑफर। प्रति वर्ष, % में। इससे दिखाया जाता है कि आप कितना ब्याज बचा सकते हैं।","उदा. ब्रोकर किंवा दुसऱ्या कर्जदात्याची ऑफर. दर वर्षी, % मध्ये. यावरून तुम्ही किती व्याज वाचवू शकता ते दाखवले जाते."],
+phO:["For example 8.25","जैसे 8.25","उदा. 8.25"],
+sv1:["Interest saved: your rate is {0}%. The lowest estimate here is {1}% ({2}). Over {4} years you could save about {3} in interest, and about {5} less every month.","ब्याज की बचत: आपकी दर {0}% है। यहाँ सबसे कम अनुमान {1}% ({2}) है। {4} वर्षों में आप लगभग {3} ब्याज बचा सकते हैं, और हर महीने लगभग {5} कम दे सकते हैं।","व्याजाची बचत: तुमचा दर {0}% आहे. येथील सर्वात कमी अंदाज {1}% ({2}) आहे. {4} वर्षांत तुम्ही सुमारे {3} व्याज वाचवू शकता, आणि दर महिन्याला सुमारे {5} कमी भरू शकता."],
+sv2:["Your rate of {0}% is the same as or lower than the lowest estimate here ({1}% at {2}). That looks like a good offer.","आपकी {0}% दर यहाँ के सबसे कम अनुमान ({1}%, {2}) के बराबर या उससे कम है। यह अच्छा ऑफर लगता है।","तुमचा {0}% दर येथील सर्वात कमी अंदाजाइतका ({1}%, {2}) किंवा त्यापेक्षा कमी आहे. ही चांगली ऑफर दिसते."],
+sv3:["Enter the loan amount and tenure to see how much interest you could save.","कितना ब्याज बच सकता है यह देखने के लिए लोन राशि और अवधि डालें।","किती व्याज वाचू शकते ते पाहण्यासाठी कर्जाची रक्कम आणि कालावधी टाका."],
+iw:["Why it is here","यह यहाँ क्यों है","हे येथे का आहे"],
+ib:["Banks that offer it","कौन से बैंक देते हैं","कोणत्या बँका देतात"],
+iu:["How we use it","हम इसका उपयोग कैसे करते हैं","आम्ही याचा वापर कसा करतो"],
+iL:["More information","अधिक जानकारी","अधिक माहिती"],
+i_young:["Bank of Baroda gives a lower rate if an applicant or co-applicant is 40 years or younger.|Bank of Baroda (0.10% off).|Bank of Baroda only. Only one concession counts, up to 0.10% in total, and the rate stays at 7.40% or above.","बैंक ऑफ बड़ौदा कम दर देता है यदि कोई आवेदक या सह-आवेदक 40 वर्ष या उससे कम उम्र का हो।|बैंक ऑफ बड़ौदा (0.10% कम)।|केवल बैंक ऑफ बड़ौदा। केवल एक छूट गिनी जाती है, कुल अधिकतम 0.10%, और दर 7.40% या उससे ऊपर रहती है।","कोणताही अर्जदार किंवा सह-अर्जदार 40 वर्षे किंवा कमी वयाचा असल्यास बँक ऑफ बडोदा कमी दर देते.|बँक ऑफ बडोदा (0.10% कमी).|फक्त बँक ऑफ बडोदा. फक्त एकच सवलत गणली जाते, एकूण कमाल 0.10%, आणि दर 7.40% किंवा त्यापेक्षा जास्त राहतो."],
+i_inc18:["Indian Bank gives a better rate to new-to-credit applicants with a gross annual income of ₹18 lakh or more.|Indian Bank (7.85% instead of 8.30% for salaried applicants).|Indian Bank only, and only for new-to-credit applicants.","इंडियन बैंक ₹18 लाख या अधिक वार्षिक आय वाले नए-क्रेडिट आवेदकों को बेहतर दर देता है।|इंडियन बैंक (वेतनभोगियों के लिए 8.30% की जगह 7.85%)।|केवल इंडियन बैंक, और केवल नए-क्रेडिट आवेदकों के लिए।","इंडियन बँक ₹18 लाख किंवा अधिक वार्षिक उत्पन्न असलेल्या नवीन-क्रेडिट अर्जदारांना चांगला दर देते.|इंडियन बँक (पगारदारांसाठी 8.30% ऐवजी 7.85%).|फक्त इंडियन बँक, आणि फक्त नवीन-क्रेडिट अर्जदारांसाठी."],
+i_bt:["Banks give a lower rate if you move an existing home loan to them.|Bank of Baroda (0.10% off) and Bank of India (up to 0.10% off).|Bank of Baroda and Bank of India.","यदि आप अपना मौजूदा होम लोन किसी बैंक में ट्रांसफर करते हैं तो बैंक कम दर देते हैं।|बैंक ऑफ बड़ौदा (0.10% कम) और बैंक ऑफ इंडिया (0.10% तक कम)।|बैंक ऑफ बड़ौदा और बैंक ऑफ इंडिया।","तुमचे सध्याचे गृहकर्ज बँकेत हलवल्यास बँका कमी दर देतात.|बँक ऑफ बडोदा (0.10% कमी) आणि बँक ऑफ इंडिया (0.10% पर्यंत कमी).|बँक ऑफ बडोदा आणि बँक ऑफ इंडिया."],
+i_rs:["Bank of Baroda gives a lower rate for resale, fully disbursed and Government project properties.|Bank of Baroda (0.10% off).|Bank of Baroda only. It does not add to the balance transfer concession.","बैंक ऑफ बड़ौदा पुनर्विक्रय, पूरी तरह वितरित और सरकारी परियोजना की संपत्तियों पर कम दर देता है।|बैंक ऑफ बड़ौदा (0.10% कम)।|केवल बैंक ऑफ बड़ौदा। यह बैलेंस ट्रांसफर की छूट के साथ जुड़ती नहीं है।","बँक ऑफ बडोदा पुनर्विक्री, पूर्ण वितरित आणि सरकारी प्रकल्पातील मालमत्तांवर कमी दर देते.|बँक ऑफ बडोदा (0.10% कमी).|फक्त बँक ऑफ बडोदा. ही बॅलन्स ट्रान्सफर सवलतीत मिसळत नाही."],
+i_nri:["Bank of India has a special product for NRIs and women at a fixed 7.90%.|Bank of India (Star Pravasi Loan).|Bank of India only. If 7.90% is lower than its normal rate, we show 7.90%.","बैंक ऑफ इंडिया के पास NRI और महिलाओं के लिए 7.90% की निश्चित दर वाला विशेष उत्पाद है।|बैंक ऑफ इंडिया (स्टार प्रवासी लोन)।|केवल बैंक ऑफ इंडिया। यदि 7.90% उसकी सामान्य दर से कम हो तो हम 7.90% दिखाते हैं।","बँक ऑफ इंडियाकडे NRI आणि महिलांसाठी 7.90% निश्चित दराचे विशेष उत्पादन आहे.|बँक ऑफ इंडिया (स्टार प्रवासी लोन).|फक्त बँक ऑफ इंडिया. 7.90% त्याच्या सामान्य दरापेक्षा कमी असल्यास आम्ही 7.90% दाखवतो."],
+i_ins:["Some banks quote a lower rate when you take loan insurance.|Bank of Baroda (0.05% cheaper), HDFC (its rates are quoted with insurance) and Bank of India (may give up to 0.10% extra).|Bank of Baroda uses its with-insurance rate. For HDFC and Bank of India we only show a note.","कुछ बैंक लोन बीमा लेने पर कम दर देते हैं।|बैंक ऑफ बड़ौदा (0.05% सस्ता), HDFC (दरें बीमा के साथ बताई जाती हैं) और बैंक ऑफ इंडिया (0.10% तक अतिरिक्त छूट संभव)।|बैंक ऑफ बड़ौदा बीमा वाली दर चुनता है। HDFC और बैंक ऑफ इंडिया के लिए हम केवल नोट दिखाते हैं।","काही बँका कर्ज विमा घेतल्यास कमी दर देतात.|बँक ऑफ बडोदा (0.05% स्वस्त), HDFC (दर विम्यासह सांगितले जातात) आणि बँक ऑफ इंडिया (0.10% पर्यंत अतिरिक्त सवलत शक्य).|बँक ऑफ बडोदा विम्यासह दर वापरते. HDFC आणि बँक ऑफ इंडियासाठी आम्ही फक्त टीप दाखवतो."],
+i_h345:["Central Bank has separate rates when this is your 3rd, 4th or 5th home loan.|Central Bank of India.|Central Bank only.","यह आपका तीसरा, चौथा या पाँचवाँ होम लोन हो तो सेंट्रल बैंक की दरें अलग हैं।|सेंट्रल बैंक ऑफ इंडिया।|केवल सेंट्रल बैंक।","हे तुमचे तिसरे, चौथे किंवा पाचवे गृहकर्ज असल्यास सेंट्रल बँकेचे दर वेगळे आहेत.|सेंट्रल बँक ऑफ इंडिया.|फक्त सेंट्रल बँक."],
+i_green:["Central Bank has cheaper schemes for green (eco-friendly) homes.|Central Bank of India (0.10% lower for Home Loan and 3rd/4th/5th house; same for Grih Lakshmi).|Central Bank only.","सेंट्रल बैंक की ग्रीन (पर्यावरण-अनुकूल) घरों के लिए सस्ती योजनाएँ हैं।|सेंट्रल बैंक ऑफ इंडिया (होम लोन और तीसरे/चौथे/पाँचवें घर पर 0.10% कम; गृह लक्ष्मी पर समान)।|केवल सेंट्रल बैंक।","सेंट्रल बँकेच्या ग्रीन (पर्यावरणपूरक) घरांसाठी स्वस्त योजना आहेत.|सेंट्रल बँक ऑफ इंडिया (गृहकर्ज आणि तिसऱ्या/चौथ्या/पाचव्या घरावर 0.10% कमी; गृह लक्ष्मीवर सारखेच).|फक्त सेंट्रल बँक."],
+ownN:["Rate quoted from your advisor (optional)","आपके सलाहकार से मिली दर (वैकल्पिक)","तुमच्या सल्लागाराकडून मिळालेला दर (ऐच्छिक)"],
+d2a:["EMI and savings figures are estimates too. Confirm with the bank or ","EMI और बचत के आँकड़े भी अनुमानित हैं। बैंक से पुष्टि करें या ","EMI आणि बचतीचे आकडेही अंदाजे आहेत. बँकेकडे खात्री करा किंवा "],
+d2b:["book a free introductory call with our advisor.","हमारे सलाहकार के साथ मुफ़्त परिचयात्मक कॉल बुक करें।","आमच्या सल्लागारासोबत मोफत ओळख कॉल बुक करा."],
+empty:["Your estimated rates will appear here.","आपकी अनुमानित दरें यहाँ दिखेंगी।","तुमचे अंदाजे दर येथे दिसतील."],
+noteB:["These rates are approximate.","ये दरें अनुमानित हैं।","हे दर अंदाजे आहेत."],
+noteT:[" The final rate is decided by the bank after looking at many factors, such as your income, documents, property and credit history."," अंतिम दर बैंक कई बातों को देखकर तय करता है, जैसे आपकी आय, दस्तावेज़, संपत्ति और क्रेडिट इतिहास।"," अंतिम दर बँक अनेक बाबी पाहून ठरवते, जसे तुमचे उत्पन्न, कागदपत्रे, मालमत्ता आणि क्रेडिट इतिहास."],
+disc:["EMI and savings figures are estimates too. Rates are taken from bank rate cards valid in October to November 2026 and can change. Confirm with the bank or your advisor.","EMI और बचत के आँकड़े भी अनुमानित हैं। दरें अक्टूबर से नवंबर 2026 तक मान्य बैंक रेट कार्ड से ली गई हैं और बदल सकती हैं। बैंक या अपने सलाहकार से पुष्टि करें।","EMI आणि बचतीचे आकडेही अंदाजे आहेत. दर ऑक्टोबर ते नोव्हेंबर 2026 साठी वैध बँक रेट कार्डवरून घेतले आहेत आणि बदलू शकतात. बँक किंवा सल्लागाराकडे खात्री करा."],
+errM:["Choose whether you have a CIBIL score or are new to credit.","चुनें कि आपके पास CIBIL स्कोर है या आप क्रेडिट में नए हैं।","तुमच्याकडे CIBIL स्कोर आहे की तुम्ही क्रेडिटसाठी नवीन आहात ते निवडा."],
+errS:["Enter a score between 300 and 900.","300 से 900 के बीच स्कोर डालें।","300 ते 900 दरम्यान स्कोर टाका."],
+low:["Lowest estimate","सबसे कम अनुमान","सर्वात कमी अंदाज"],
+pa:[" % p.a."," % प्रति वर्ष"," % दर वर्षी"],
+na:["Not available","उपलब्ध नहीं","उपलब्ध नाही"],
+rng:["Possible range {0}% to {1}%","संभावित सीमा {0}% से {1}%","संभाव्य श्रेणी {0}% ते {1}%"],
+emi:["Monthly EMI about {0} · Total interest about {1}","मासिक EMI लगभग {0} · कुल ब्याज लगभग {1}","मासिक EMI अंदाजे {0} · एकूण व्याज अंदाजे {1}"],
+sav:["With the lowest estimate ({0}) you could pay about {1} less interest over {2} years than with the highest estimate shown ({3}).","सबसे कम अनुमान ({0}) के साथ आप {2} वर्षों में दिखाए गए सबसे ऊँचे अनुमान ({3}) की तुलना में लगभग {1} कम ब्याज दे सकते हैं।","सर्वात कमी अंदाजासह ({0}) तुम्ही दाखवलेल्या सर्वात जास्त अंदाजापेक्षा ({3}) {2} वर्षांत सुमारे {1} कमी व्याज भरू शकता."],
+wa:["Talk to an expert on WhatsApp","WhatsApp पर विशेषज्ञ से बात करें","WhatsApp वर तज्ज्ञाशी बोला"],
+lakh:["lakh","लाख","लाख"],crore:["crore","करोड़","कोटी"],
+nGov:["New-to-credit rate for Government/PSU staff, pensioners and salaried people earning ₹18 lakh or more","सरकारी/PSU कर्मचारियों, पेंशनभोगियों और ₹18 लाख या अधिक कमाने वाले वेतनभोगियों के लिए नए-क्रेडिट की दर","सरकारी/PSU कर्मचारी, निवृत्तीवेतनधारक आणि ₹18 लाख किंवा अधिक कमावणाऱ्या पगारदारांसाठी नवीन-क्रेडिट दर"],
+nOth:["New-to-credit rate for other applicants","अन्य आवेदकों के लिए नए-क्रेडिट की दर","इतर अर्जदारांसाठी नवीन-क्रेडिट दर"],
+n700:["Score of 700 and below carries a higher risk premium","700 और उससे कम स्कोर पर अधिक जोखिम प्रीमियम लगता है","700 आणि त्याखालील स्कोरवर जास्त जोखीम प्रीमियम लागतो"],
+nFest:["Festival offer valid till 30.11.2026 with processing charges waived","त्योहार ऑफर 30.11.2026 तक मान्य, प्रोसेसिंग शुल्क माफ","सण ऑफर 30.11.2026 पर्यंत वैध, प्रक्रिया शुल्क माफ"],
+nIB:["A further 0.05% home loan concession is mentioned in the offer and is not included here","ऑफर में 0.05% की अतिरिक्त होम लोन छूट का उल्लेख है, जो यहाँ शामिल नहीं है","ऑफरमध्ये 0.05% अतिरिक्त गृहकर्ज सवलतीचा उल्लेख आहे, ती येथे धरलेली नाही"],
+nNT:["Rate for score of -1 or 0","-1 या 0 स्कोर की दर","-1 किंवा 0 स्कोरसाठी दर"],
+naB:["Scores below 700 are for review only. No fresh loans.","700 से कम स्कोर केवल समीक्षा के लिए हैं। नए लोन नहीं।","700 पेक्षा कमी स्कोर फक्त पुनरावलोकनासाठी आहेत. नवीन कर्ज नाही."],
+nTk:["Up to 0.10% concession for takeover or Government/PSU employees applied","टेकओवर या सरकारी/PSU कर्मचारियों के लिए 0.10% तक की छूट लागू की गई","टेकओव्हर किंवा सरकारी/PSU कर्मचाऱ्यांसाठी 0.10% पर्यंत सवलत लागू केली"],
+nP1:["Star Pravasi product for NRIs and women at 7.90%","NRI और महिलाओं के लिए स्टार प्रवासी उत्पाद 7.90% पर","NRI आणि महिलांसाठी स्टार प्रवासी उत्पादन 7.90% दराने"],
+nP2:["Star Pravasi product (NRIs and women) is 7.90%, so your rate is already lower","स्टार प्रवासी उत्पाद (NRI और महिलाएँ) 7.90% है, इसलिए आपकी दर पहले से कम है","स्टार प्रवासी उत्पादन (NRI आणि महिला) 7.90% आहे, त्यामुळे तुमचा दर आधीच कमी आहे"],
+nBI:["Taking insurance may give up to 0.10% extra concession","बीमा लेने पर 0.10% तक अतिरिक्त छूट मिल सकती है","विमा घेतल्यास 0.10% पर्यंत अतिरिक्त सवलत मिळू शकते"],
+naP:["Bank of Baroda home loan rates apply to loans of ₹20 lakh and above.","बैंक ऑफ बड़ौदा की होम लोन दरें ₹20 लाख और उससे अधिक के लोन पर लागू हैं।","बँक ऑफ बडोदाचे गृहकर्ज दर ₹20 लाख व त्यापेक्षा जास्त कर्जासाठी लागू आहेत."],
+nB2:["This rate applies to loans of ₹20 lakh and above","यह दर ₹20 लाख और उससे अधिक के लोन पर लागू है","हा दर ₹20 लाख व त्यापेक्षा जास्त कर्जासाठी लागू आहे"],
+nCc:["Concession of {0}% applied. Only one concession counts, up to 0.10%, and the rate stays at 7.40% or above","{0}% की छूट लागू की गई। केवल एक छूट गिनी जाती है, अधिकतम 0.10%, और दर 7.40% या उससे ऊपर रहती है","{0}% सवलत लागू केली. फक्त एकच सवलत गणली जाते, कमाल 0.10%, आणि दर 7.40% किंवा त्यापेक्षा जास्त राहतो"],
+nW:["Rate with loan insurance (GCLI)","लोन बीमा (GCLI) के साथ दर","कर्ज विमा (GCLI) सह दर"],
+nWo:["Rate without insurance. Taking insurance is 0.05% cheaper","बीमा के बिना दर। बीमा लेने पर 0.05% सस्ता","विम्याशिवाय दर. विमा घेतल्यास 0.05% स्वस्त"],
+n701:["Scores below 701 carry a much higher rate","701 से कम स्कोर पर दर काफ़ी अधिक होती है","701 पेक्षा कमी स्कोरवर दर खूप जास्त असतो"],
+nRg:["Range runs from the negotiated senior-level rate to the standard rack rate","सीमा बातचीत से तय वरिष्ठ-स्तर की दर से मानक रैक दर तक है","श्रेणी वाटाघाटीने ठरलेल्या वरिष्ठ-स्तरीय दरापासून मानक रॅक दरापर्यंत आहे"],
+nSp:["Estimate uses the special offer rate that a branch can give","अनुमान में वह विशेष ऑफर दर ली गई है जो शाखा दे सकती है","अंदाजात शाखा देऊ शकेल तो विशेष ऑफर दर वापरला आहे"],
+nRv:["Revised rates effective 12 November 2026","संशोधित दरें 12 नवंबर 2026 से प्रभावी","सुधारित दर 12 नोव्हेंबर 2026 पासून लागू"],
+nHI:["HDFC pricing is quoted with insurance. Without it the rate may be higher","HDFC की दरें बीमा के साथ बताई गई हैं। इसके बिना दर अधिक हो सकती है","HDFC चे दर विम्यासह सांगितले आहेत. त्याशिवाय दर जास्त असू शकतो"],
+naC:["Central Bank needs a score of 700 or more.","सेंट्रल बैंक को 700 या उससे अधिक स्कोर चाहिए।","सेंट्रल बँकेला 700 किंवा अधिक स्कोर हवा."],
+nC1:["Scheme for 3rd, 4th or 5th home","तीसरे, चौथे या पाँचवें घर की योजना","तिसरे, चौथे किंवा पाचवे घर योजना"],
+nC2:["Cent Green scheme for 3rd, 4th or 5th home","तीसरे, चौथे या पाँचवें घर के लिए सेंट ग्रीन योजना","तिसरे, चौथे किंवा पाचव्या घरासाठी सेंट ग्रीन योजना"],
+nC3:["Cent Green Home Loan rate","सेंट ग्रीन होम लोन दर","सेंट ग्रीन गृहकर्ज दर"],
+nC4:["Cent Home Loan rate","सेंट होम लोन दर","सेंट गृहकर्ज दर"],
+nC7:["A score of -1 or 0 is treated like a score of 725","-1 या 0 स्कोर को 725 के बराबर माना जाता है","-1 किंवा 0 स्कोर 725 सारखा मानला जातो"],
+nGL:["Cent Grih Lakshmi scheme is cheaper at {0}%. Ask the bank if you are eligible","सेंट गृह लक्ष्मी योजना {0}% पर सस्ती है। बैंक से पूछें कि क्या आप पात्र हैं","सेंट गृह लक्ष्मी योजना {0}% दराने स्वस्त आहे. तुम्ही पात्र आहात का ते बँकेला विचारा"],
+nGW:[". For women, a score of -1 or 0 is treated like 750","। महिलाओं के लिए -1 या 0 स्कोर को 750 के बराबर माना जाता है",". महिलांसाठी -1 किंवा 0 स्कोर 750 सारखा मानला जातो"]};
+function t(k){var s=T[k][L];for(var i=1;i<arguments.length;i++)s=s.replace("{"+(i-1)+"}",arguments[i]);return s}
+function pick(sc,a){for(var i=0;i<a.length;i++){if(sc>=a[i][0])return a[i][1]}return a[a.length-1][1]}
+function f2(x){return x.toFixed(2)}
+function indian(s){
+ var n=[],r;
+ if(s.ntc){var gv=s.emp==="govt"||s.emp==="pens"||(s.emp==="pvt"&&s.inc18);r=gv?7.85:8.30;n.push(t(gv?"nGov":"nOth"))}
+ else{r=pick(s.sc,[[800,7.35],[751,7.50],[730,7.65],[701,8.20],[0,8.75]]);if(s.sc<=700)n.push(t("n700"))}
+ n.push(t("nFest"));n.push(t("nIB"));
+ return{r:r,n:n}}
+function boi(s){
+ var n=[],r,sal=s.emp!=="self";
+ if(s.ntc){r=8.15;n.push(t("nNT"))}
+ else if(s.sc<700)return{na:t("naB"),n:[]};
+ else r=pick(s.sc,[[840,7.35],[800,7.50],[760,sal?7.65:7.75],[725,sal?8.15:8.25],[700,sal?8.65:8.70]]);
+ if(s.bt||s.emp==="govt"){var o=r;r=Math.max(7.35,r-.10);if(r<o)n.push(t("nTk"))}
+ if(s.f||s.nri){if(7.90<r){r=7.90;n.push(t("nP1"))}else n.push(t("nP2"))}
+ n.push(t("nBI"));
+ return{r:r,n:n}}
+function bob(s){
+ if(s.amt>0&&s.amt<2e6)return{na:t("naP"),n:[]};
+ var n=[],c=s.ins?0:1,tb;if(!(s.amt>0))n.push(t("nB2"));
+ if(s.ntc)tb=[7.95,8.00];else tb=s.sc>=825?[7.40,7.45]:s.sc>=800?[7.50,7.55]:s.sc>=751?[7.60,7.65]:s.sc>=701?[7.90,7.95]:[9.15,9.20];
+ var r=tb[c],cc=Math.max((s.bt||s.rs)?.10:0,s.young?.10:0,s.f?.05:0);
+ if(cc>0){r=Math.max(7.40,r-cc);n.push(t("nCc",f2(cc)))}
+ n.push(t(s.ins?"nW":"nWo"));
+ if(!s.ntc&&s.sc<701)n.push(t("n701"));
+ return{r:r,n:n}}
+function hdfc(s){
+ var n=[];
+ if(!s.ntc&&s.sc<750){
+  var i=s.sc>=730?0:s.sc>=700?1:2,se=s.emp==="self";
+  var sp=[8.75,8.85,9.70][i],hi=[8.85,8.95,9.80][i],lo=(se?[8.55,8.65,9.50]:[8.45,8.55,9.40])[i];
+  n.push(t("nRg"));n.push(t("nSp"));
+  return{r:sp,lo:lo,hi:hi,n:n}}
+ var r=s.ntc?7.90:s.sc>=800?7.70:s.sc>=780?7.80:7.90;
+ n.push(t("nRv"));
+ if(!s.ins)n.push(t("nHI"));
+ return{r:r,n:n}}
+function central(s){
+ var n=[],i=s.ntc?3:s.sc>=800?0:s.sc>=775?1:s.sc>=750?2:s.sc>=725?3:s.sc>=700?4:-1;
+ if(i<0)return{na:t("naC"),n:[]};
+ var HL=[7.45,7.65,8.15,8.95,9.00],GH=[7.35,7.55,8.05,8.85,8.90],H3=[7.95,8.15,8.65,9.45,9.50],G3=[7.85,8.05,8.55,9.35,9.40],GL=[7.25,7.45,7.75,8.35,8.50];
+ var r=s.h345?(s.green?G3[i]:H3[i]):(s.green?GH[i]:HL[i]);
+ n.push(t(s.h345?(s.green?"nC2":"nC1"):(s.green?"nC3":"nC4")));
+ if(s.ntc)n.push(t("nC7"));
+ if(!s.h345){var j=s.ntc&&s.f?2:i;n.push(t("nGL",f2(GL[j]))+(s.ntc&&s.f?t("nGW"):""))}
+ return{r:r,n:n}}
+var BANKS=[["Indian Bank",indian],["Bank of India",boi],["Bank of Baroda",bob],["HDFC Bank",hdfc],["Central Bank of India",central]];
+var MAXL={"Indian Bank":75,"Bank of India":90,"Bank of Baroda":90,"HDFC Bank":90,"Central Bank of India":90};
+var INFO=["young","inc18","bt","rs","nri","ins","h345","green"];
+function infoFill(k){var a=t("i_"+k).split("|");$("p_"+k).innerHTML="<b>"+t("iw")+"</b>"+a[0]}
+function infoInit(){INFO.forEach(function(k){var lb=$(k).closest("label"),b=document.createElement("button"),p=document.createElement("div");b.type="button";b.className="i";b.textContent="i";b.setAttribute("aria-expanded","false");b.setAttribute("aria-controls","p_"+k);p.className="inf";p.id="p_"+k;p.hidden=true;b.addEventListener("click",function(ev){ev.preventDefault();ev.stopPropagation();p.hidden=!p.hidden;b.setAttribute("aria-expanded",String(!p.hidden));if(!p.hidden)infoFill(k)});lb.appendChild(b);lb.insertAdjacentElement("afterend",p)})}
+var EMP=["Salaried, private company","Salaried, Government / PSU","Self-employed or business","Pensioner"];
+function inr(v){v=Math.round(v);return v>=1e7?"₹"+(v/1e7).toFixed(2)+" "+t("crore"):v>=1e5?"₹"+(v/1e5).toFixed(2)+" "+t("lakh"):"₹"+v.toLocaleString("en-IN")}
+function emiOf(P,r,y){var i=r/1200,n=y*12,k=Math.pow(1+i,n);return P*i*k/(k-1)}
+function hasLoan(s){return s.amt>0&&s.yrs>0}
+function emiHtml(x,s){if(!hasLoan(s))return"";var P=s.amt,m=emiOf(P,x.r,s.yrs);x.tot=m*s.yrs*12-P;return'<div class="emi">'+t("emi","<b>₹"+Math.round(m).toLocaleString("en-IN")+"</b>",inr(x.tot))+'</div>'}
+function read(){var v=function(i){return $(i).checked};
+ var o={sc:parseInt($("sc").value,10),ntc:v("mn"),own:parseFloat($("own").value),f:$("g").value==="f",emp:$("emp").value,young:v("young"),inc18:v("inc18"),amt:parseInt($("amt").value,10),yrs:parseFloat($("yrs").value),bt:v("bt"),rs:v("rs"),pv:parseInt($("pv").value,10),nri:v("nri"),ins:v("ins"),h345:v("h345"),green:v("green")};o.amtIn=o.amt;if(o.pv>0&&o.amt>.9*o.pv){o.amt=Math.floor(o.pv*.9);o.cap=true}return o}
+var NOTE=function(){return'<div class="note"><b>'+t("noteB")+'</b>'+t("noteT")+'</div>'};
+function empty(){$("out").innerHTML=NOTE()+'<div class="panel empty">'+t("empty")+'</div>'}
+function run(){
+ var s=read(),e=$("err");e.textContent="";
+ if(!$("mc").checked&&!$("mn").checked){e.textContent=t("errM");empty();return}
+ if(!s.ntc&&(isNaN(s.sc)||s.sc<300||s.sc>900)){e.textContent=t("errS");empty();return}
+ if(s.amtIn>1e8){amtShow();empty();return}
+ var res=BANKS.map(function(b){var x=b[1](s);x.name=b[0];var m=MAXL[b[0]];if(!x.na&&s.pv>0&&s.amt>0&&s.amt/s.pv*100>m)x={name:b[0],na:t("nLtv",m,(s.amt/s.pv*100).toFixed(1),inr(s.pv*m/100)),n:[]};return x});
+ var ok=res.filter(function(x){return !x.na}).sort(function(a,b){return a.r-b.r});
+ var no=res.filter(function(x){return x.na});
+ var h="";
+ ok.forEach(function(x,i){
+  h+='<div class="bank'+(i===0?" best":"")+'"><div class="top"><div><span class="nm">'+x.name+'</span>'+(i===0?'<span class="tag">'+t("low")+'</span>':"")+'</div><div class="rate">'+f2(x.r)+'<small>'+t("pa")+'</small></div></div>'+(x.lo?'<div class="rng">'+t("rng",f2(x.lo),f2(x.hi))+'</div>':"")+emiHtml(x,s)+'<ul>'+x.n.map(function(q){return"<li>"+q+"</li>"}).join("")+'</ul></div>'});
+ var top="";
+ if(s.own>0&&s.own<=30&&ok.length){
+  if(!hasLoan(s))top='<div class="save">'+t("sv3")+'</div>';
+  else{var a=ok[0],P=s.amt,nn=s.yrs*12,m1=emiOf(P,s.own,s.yrs),m0=emiOf(P,a.r,s.yrs),i1=m1*nn-P,i0=m0*nn-P;
+   top=a.r<s.own?'<div class="save">'+t("sv1",f2(s.own),f2(a.r),a.name,"<b>"+inr(i1-i0)+"</b>",s.yrs,"₹"+Math.round(m1-m0).toLocaleString("en-IN"))+'</div>':'<div class="save">'+t("sv2",f2(s.own),f2(a.r),a.name)+'</div>'}}
+ var sg="";
+ if(s.pv>0&&s.amtIn>0){var l=s.amt/s.pv*100,pr=[];
+  if(s.cap)pr.push(t("ltvC",inr(s.amt)));
+  if(ok.length)pr.push(t("sgA",l.toFixed(1),ok.map(function(x){return x.name}).join(", ")));
+  BANKS.forEach(function(b){var m=MAXL[b[0]];if(l>m){var mx=s.pv*m/100;pr.push(t("sgP",b[0],m,inr(mx),inr(s.amt-mx)))}});
+  sg='<div class="save"><b>'+t("sgT")+'</b><br>'+pr.join("<br>")+'</div>'}
+ var msg="Hi OwnWard, I used LoanCalc and would like help with a home loan.\nCredit: "+(s.ntc?"New to credit":"CIBIL about "+s.sc)+"\nEmployment: "+EMP[$("emp").selectedIndex]+(hasLoan(s)?"\nLoan: ₹"+s.amt.toLocaleString("en-IN")+" for "+s.yrs+" years":"")+(s.pv>0&&s.amt>0?"\nProperty value: ₹"+s.pv.toLocaleString("en-IN")+" (LTV "+(s.amt/s.pv*100).toFixed(1)+"%)":"")+(ok.length?"\nLowest estimate: "+ok[0].name+" at "+f2(ok[0].r)+"%":"")+(s.own>0?"\nRate I was offered: "+s.own+"%":"")+"\nPlease call me back.";
+ var wa='<a class="wa" target="_blank" rel="noopener" href="https://wa.me/918591857988?text='+encodeURIComponent(msg)+'">'+t("wa")+'</a>';
+ no.forEach(function(x){h+='<div class="bank na"><div class="top"><span class="nm">'+x.name+'</span><div class="rate">'+t("na")+'</div></div><ul><li>'+x.na+'</li></ul></div>'});
+ $("out").innerHTML=NOTE()+top+sg+h+wa}
+function shown(){return $("out").querySelector(".bank")}
+function amtShow(){var v=parseInt($("amt").value,10),a=$("amtF");a.style.color="";if(v>1e8){a.textContent=t("errA");a.style.color="var(--no)"}else a.textContent=v>0?"₹"+v.toLocaleString("en-IN")+(v>=1e5?" ("+inr(v)+")":""):""}
+function pvShow(){var v=parseInt($("pv").value,10);$("pvF").textContent=v>0?"₹"+v.toLocaleString("en-IN")+(v>=1e5?" ("+inr(v)+")":""):""}
+function ltvShow(){var a=parseInt($("amt").value,10),p=parseInt($("pv").value,10),f=$("ltvF");if(!(a>0&&p>0)){f.textContent=t("ltvE");return}var l=a/p*100;f.textContent=Math.min(l,90).toFixed(1)+"%"+(l>90?" · "+t("ltvC",inr(Math.floor(p*.9))):"")}
+function lang(i){L=i;document.documentElement.lang=["en","hi","mr"][i];
+ document.querySelectorAll("[data-k]").forEach(function(el){el.textContent=t(el.dataset.k)});
+ document.querySelectorAll("[data-p]").forEach(function(el){el.placeholder=t(el.dataset.p)});
+ document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",String(+b.dataset.l===i))});
+ $("disc").innerHTML=t("d2a")+'<a href="https://wa.me/918591857988?text='+encodeURIComponent("Hi OwnWard, I would like to book a free introductory call.")+'" target="_blank" rel="noopener" style="color:inherit;font-weight:600">'+t("d2b")+'</a>';
+ amtShow();pvShow();ltvShow();INFO.forEach(function(k){var p=$("p_"+k);if(p&&!p.hidden)infoFill(k)});document.querySelectorAll("button.i").forEach(function(b){b.setAttribute("aria-label",t("iL"))});if(shown()||$("err").textContent)run();else empty()}
+function mode(){var c=$("mc").checked,n=$("mn").checked,s=c||n;$("scw").hidden=!c;INFO.forEach(function(k){var lb=$(k).closest("label"),show=k==="inc18"?n:k==="bt"?c:s;lb.hidden=!show;if(!show){$(k).checked=false;var p=$("p_"+k);if(p)p.hidden=true}})}
+$("f").addEventListener("submit",function(ev){ev.preventDefault();run();if(window.innerWidth<=820)$("out").scrollIntoView({behavior:"smooth"})});
+["mc","mn"].forEach(function(i){$(i).addEventListener("change",mode)});
+["mc","mn","g","emp","young","inc18","bt","rs","nri","ins","h345","green"].forEach(function(i){$(i).addEventListener("change",function(){if(shown())run()})});
+["sc","amt","pv","yrs","own"].forEach(function(i){$(i).addEventListener("input",function(){if(i==="amt")amtShow();if(i==="pv")pvShow();if(i==="amt"||i==="pv")ltvShow();if(shown())run()})});
+document.querySelectorAll(".lang button").forEach(function(b){b.addEventListener("click",function(){lang(+b.dataset.l)})});
+for(var y=1;y<=30;y++){var o=document.createElement("option");o.value=y;o.textContent=y;$("yrs").appendChild(o)}
+infoInit();mode();
+lang(0);
+</script>
+</body>
+</html>
